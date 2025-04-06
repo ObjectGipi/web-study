@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "tsc && node dist/index.js",
-    "prett": "prettier --write \"src/**/*.ts\""
+    "pretty": "prettier --write \"src/**/*.ts\""
   },
   "private": true,
   "devDependencies": {
