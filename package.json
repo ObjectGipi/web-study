@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "tsc && node dist/index.js",
+    "start2": "tsc && node dist/homework.js",
     "pretty": "prettier --write \"src/**/*.ts\""
   },
   "private": true,

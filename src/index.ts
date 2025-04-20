@@ -15,7 +15,7 @@ type UserType = {
 };
 
 const user1: UserType = {
-  email, // 키와 값이 둘 다 같으면 하나만 쓰는 축약법 (email)
+  email, // 키와 값이 둘 다 선언해놓은 내용과 같으면 하나만 쓰는 축약법
   age,
   password,
   isAdult,
@@ -43,7 +43,7 @@ console.log(
 let x: number = 1; // const = 상수
 x = x + 1; // = x++ & x+=1
 x = x * 2; // = x*=2
-x++; // 잘 안씀
+x++; // x = x + 1 (잘 안씀)
 x += 1;
 x *= 2;
 console.log(x);
@@ -89,14 +89,14 @@ for (let i = 0; i < 10; i = i + 1) {
 }
 
 let k: number = 1;
-let sum: number = 0
+let sum: number = 0;
 while (k < 11) {
-    sum = sum + k
-    k = k + 1;
+  sum = sum + k;
+  k = k + 1;
 }
-console.log(`총합: ${sum}`)
+console.log(`총합: ${sum}`);
 
-// 똑같이 생겼지만 명확한 의미가 다름 -> user: UserType) => string = (user: UserType): string
+// 똑같이 생겼지만 명확한 의미가 다름 -> (user: UserType) => string = (user: UserType): string
 const getUserProfile: (user: UserType) => string = (user: UserType): string => {
   if (user.isAdult === true) {
     return `user: my email is ${user.email}, my age is ${user.age}, my password is ${user.password},
@@ -108,5 +108,5 @@ const getUserProfile: (user: UserType) => string = (user: UserType): string => {
 };
 
 for (let i = 0; i < 2; i = i + 1) {
-    console.log(getUserProfile(users[i]))
+  console.log(getUserProfile(users[i]));
 }
