@@ -1,6 +1,3 @@
-// test
-console.log(`Log Test`);
-
 // homework1-1 (내가 작성한 코드)
 const n: number = 3;
 if (n >= 2 && n <= 9) {
@@ -101,16 +98,16 @@ console.log(`================`);
 // 2부터 n - 1 까지의 정수중에서 n을 나눌 수 있는 정수가 있는지 판단 -> 없다면 소수
 const checkPrimeNumber: (n: number) => boolean = (n: number): boolean => {
   let i: number = 2;
-  let result: boolean = true;
 
   while (i < n) {
-    // 이 결과를 result에 담고싶음
     if (n % i === 0) {
-      result = false;
+      return false
     }
+
     i = i + 1;
   }
-  return result;
+
+  return true;
 };
 
 let testNumber: number = 4;
@@ -121,11 +118,11 @@ console.log(`================`);
 // 소수인지 체크하고 배열에 넣고 리턴을 배열의 갯수로 하면 될듯?
 const countPrimeNumber: (n: number) => number = (n: number): number => {
   let i: number = 2;
-  let j: number = 2; // i가 소수인지 아닌지 확인하는 용도
+  // let j: number = 2; // i가 소수인지 아닌지 확인하는 용도
   let primeNumberList: number[] = [];
 
   while (i <= n) {
-    if (i % j === 1) {
+    if (checkPrimeNumber(i)) {
       primeNumberList.push(i);
     }
 
@@ -139,33 +136,3 @@ console.log(countPrimeNumber(6));
 console.log(`================`);
 // 2, 3, 5로 소수는 총 3개가 나와야함
 // 근데 5를 어떻게 check 해야할지 잘,,,
-
-// homework 2-4 (GPT의 도움을 받아 작성한 코드)
-const countPrimeNumberGPT: (n: number) => number = (n: number): number => {
-  let i: number = 2;
-  let primeNumberList: number[] = [];
-
-  while (i <= n) {
-    let j: number = 2;
-    let isPrime: boolean = true;
-
-    while (j < i) {
-      if (i % j === 0) {
-        isPrime = false;
-        break;
-      }
-      j = j + 1;
-    }
-
-    if (isPrime) {
-      primeNumberList.push(i);
-    }
-
-    i = i + 1;
-  }
-
-  return primeNumberList.length;
-};
-
-console.log(countPrimeNumberGPT(6));
-console.log(`================`);

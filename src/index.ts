@@ -110,3 +110,4 @@ const getUserProfile: (user: UserType) => string = (user: UserType): string => {
 for (let i = 0; i < 2; i = i + 1) {
   console.log(getUserProfile(users[i]));
 }
+
