@@ -36,8 +36,8 @@ console.log(`================`);
 
 // homework1-2 (GPT의 도움을 받아 작성한 코드)
 for (let i = 2; i <= 9; i++)
-  for (let j = 1; j <= 9; j++) console.log(`${i} X ${j} = ${i * j}`);
-
+  for (let j = 1; j <= 9; j++)
+      console.log(`${i} X ${j} = ${i * j}`);
 console.log(`================`);
 
 // homework 1-3 (GPT의 도움을 받아 작성한 코드)
@@ -45,9 +45,10 @@ const numberArrayReturn: (n: number) => number[] = (n: number): number[] => {
   const arrayAnswer: number[] = [];
   while (arrayAnswer.length < 5) {
     arrayAnswer.push(Math.floor(Math.random() * n + 1));
-    // 소수에 n을 곱하면 무조건 n보다 작음
-    // + 1 은 1 이상을 리턴하기위함
+    // 소수에 n을 곱해도 결과값은 무조건 n보다 작음
+    // + 1은 1 이상을 리턴하기위함
   }
+
   return arrayAnswer;
 };
 
@@ -120,11 +121,14 @@ console.log(`================`);
 // 소수인지 체크하고 배열에 넣고 리턴을 배열의 갯수로 하면 될듯?
 const countPrimeNumber: (n: number) => number = (n: number): number => {
   let i: number = 2;
+  let j: number = 2; // i가 소수인지 아닌지 확인하는 용도
   let primeNumberList: number[] = [];
-  while (i < n) {
-    if (n % i === 0) {
+
+  while (i <= n) {
+    if (i % j === 1) {
       primeNumberList.push(i);
     }
+
     i = i + 1;
   }
 
@@ -132,5 +136,36 @@ const countPrimeNumber: (n: number) => number = (n: number): number => {
 };
 
 console.log(countPrimeNumber(6));
+console.log(`================`);
 // 2, 3, 5로 소수는 총 3개가 나와야함
-// 근데 5를 어떻게 check 해야할지 잘 모르겠습니다.
+// 근데 5를 어떻게 check 해야할지 잘,,,
+
+// homework 2-4 (GPT의 도움을 받아 작성한 코드)
+const countPrimeNumberGPT: (n: number) => number = (n: number): number => {
+  let i: number = 2;
+  let primeNumberList: number[] = [];
+
+  while (i <= n) {
+    let j: number = 2;
+    let isPrime: boolean = true;
+
+    while (j < i) {
+      if (i % j === 0) {
+        isPrime = false;
+        break;
+      }
+      j = j + 1;
+    }
+
+    if (isPrime) {
+      primeNumberList.push(i);
+    }
+
+    i = i + 1;
+  }
+
+  return primeNumberList.length;
+};
+
+console.log(countPrimeNumberGPT(6));
+console.log(`================`);
