@@ -33,8 +33,7 @@ console.log(`================`);
 
 // homework1-2 (GPT의 도움을 받아 작성한 코드)
 for (let i = 2; i <= 9; i++)
-  for (let j = 1; j <= 9; j++)
-      console.log(`${i} X ${j} = ${i * j}`);
+  for (let j = 1; j <= 9; j++) console.log(`${i} X ${j} = ${i * j}`);
 console.log(`================`);
 
 // homework 1-3 (GPT의 도움을 받아 작성한 코드)
@@ -101,7 +100,7 @@ const checkPrimeNumber: (n: number) => boolean = (n: number): boolean => {
 
   while (i < n) {
     if (n % i === 0) {
-      return false
+      return false;
     }
 
     i = i + 1;
