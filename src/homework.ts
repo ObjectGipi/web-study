@@ -44,7 +44,6 @@ const numberArrayReturn: (n: number) => number[] = (n: number): number[] => {
     // 소수에 n을 곱해도 결과값은 무조건 n보다 작음
     // + 1은 1 이상을 리턴하기위함
   }
-
   return arrayAnswer;
 };
 
@@ -102,10 +101,8 @@ const checkPrimeNumber: (n: number) => boolean = (n: number): boolean => {
     if (n % i === 0) {
       return false;
     }
-
     i = i + 1;
   }
-
   return true;
 };
 
@@ -117,11 +114,40 @@ console.log(`================`);
 // 소수인지 체크하고 배열에 넣고 리턴을 배열의 갯수로 하면 될듯?
 const countPrimeNumber: (n: number) => number = (n: number): number => {
   let i: number = 2;
-  // let j: number = 2; // i가 소수인지 아닌지 확인하는 용도
   let primeNumberList: number[] = [];
 
   while (i <= n) {
     if (checkPrimeNumber(i)) {
+      primeNumberList.push(i);
+    }
+    i = i + 1;
+  }
+  return primeNumberList.length;
+};
+
+console.log(countPrimeNumber(6));
+console.log(`================`);
+// 2, 3, 5로 소수는 총 3개가 나와야함
+
+// Practice
+// 1 ~ n의 각 숫자가 소수인지 체크하고, 소수면 배열에 넣고, 최종 배열의 갯수를 리턴 하는 함수
+const countPrimeNumberPlus = (n: number): number => {
+  let i: number = 2;
+  let primeNumberList: number[] = [];
+
+  while (i <= n) {
+    let j: number = 2;
+    let isPrime: boolean = true;
+
+    while (j < i) {
+      if (i % j === 0) {
+        isPrime = false;
+        break;
+      }
+      j = j + 1;
+    }
+
+    if (isPrime) {
       primeNumberList.push(i);
     }
 
@@ -131,7 +157,38 @@ const countPrimeNumber: (n: number) => number = (n: number): number => {
   return primeNumberList.length;
 };
 
-console.log(countPrimeNumber(6));
+console.log(countPrimeNumberPlus(8));
 console.log(`================`);
-// 2, 3, 5로 소수는 총 3개가 나와야함
-// 근데 5를 어떻게 check 해야할지 잘,,,
+
+// Practice 2
+// 자연수 N이 주어질 때,
+// 1부터 N까지의 수 중 3의 배수를 제외한 모든 수의 합을 반환하는 함수
+// 이때 continue 를 사용해 3의 배수일 때 루프의 남은 부분을 건너뛰도록 구현
+// continue: 아래 코드를 무시하고, 즉시 조건 검사 -> 다음 반복
+const sumExcludingMultiplesOfThree = (n: number):number => {
+  let sum: number = 0;
+
+  for (let i: number = 1; i <= n; i = i + 1) {
+    if (i % 3 === 0) {
+      continue;
+    }
+    sum = sum + i;
+  }
+  return sum;
+}
+
+console.log(sumExcludingMultiplesOfThree(10))
+console.log(`================`);
+
+// Practice 3
+// 정수 배열 nums가 주어질 때,
+// 배열을 앞에서부터 순회하며 음수(negative number)가 처음 등장하는 인덱스를 반환하는 함수
+// 음수가 하나도 없으면 -1을 반환하며, 음수를 찾자마자 break 로 반복문을 즉시 종료
+// break: 실행 위체에서 반복문을 즉시 빠져나가, 남은 반복은 전부 건너뛰고 다음 코드로 이동
+const firstNegativeIndex = (n: number): number => {
+  let nums: number[] = []
+  // 랜덤한 양수, 음수, 0을 포함하는 배열을 생성하는 코드
+  // 배열을 앞에서부터 순회하는 코드
+  // 해당 배열의 인덱스를 찾는 코드
+  return -1
+}
