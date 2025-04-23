@@ -165,7 +165,7 @@ console.log(`================`);
 // 1부터 N까지의 수 중 3의 배수를 제외한 모든 수의 합을 반환하는 함수
 // 이때 continue 를 사용해 3의 배수일 때 루프의 남은 부분을 건너뛰도록 구현
 // continue: 아래 코드를 무시하고, 즉시 조건 검사 -> 다음 반복
-const sumExcludingMultiplesOfThree = (n: number):number => {
+const sumExcludingMultiplesOfThree = (n: number): number => {
   let sum: number = 0;
 
   for (let i: number = 1; i <= n; i = i + 1) {
@@ -175,9 +175,9 @@ const sumExcludingMultiplesOfThree = (n: number):number => {
     sum = sum + i;
   }
   return sum;
-}
+};
 
-console.log(sumExcludingMultiplesOfThree(10))
+console.log(sumExcludingMultiplesOfThree(10));
 console.log(`================`);
 
 // Practice 3
@@ -185,10 +185,17 @@ console.log(`================`);
 // 배열을 앞에서부터 순회하며 음수(negative number)가 처음 등장하는 인덱스를 반환하는 함수
 // 음수가 하나도 없으면 -1을 반환하며, 음수를 찾자마자 break 로 반복문을 즉시 종료
 // break: 실행 위체에서 반복문을 즉시 빠져나가, 남은 반복은 전부 건너뛰고 다음 코드로 이동
-const firstNegativeIndex = (n: number): number => {
-  let nums: number[] = []
-  // 랜덤한 양수, 음수, 0을 포함하는 배열을 생성하는 코드
-  // 배열을 앞에서부터 순회하는 코드
-  // 해당 배열의 인덱스를 찾는 코드
-  return -1
-}
+// i < n.length ➡️ 배열의 마지막 원소까지 확인
+const firstNegativeIndex = (n: number[]): number => {
+  let foundIndex: number = -1;
+
+  for (let i: number = 0; i < n.length; i = i + 1) {
+    if (n[i] < 0) {
+      foundIndex = i;
+      break;
+    }
+  }
+  return foundIndex;
+};
+
+console.log(firstNegativeIndex([1,2,3,-2,4,5]));

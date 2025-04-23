@@ -2,8 +2,8 @@
   "name": "web-study",
   "version": "1.0.0",
   "scripts": {
-    "start": "tsc && node dist/index.js",
-    "start2": "tsc && node dist/homework.js",
+    "index": "tsc && node dist/index.js",
+    "homework": "tsc && node dist/homework.js",
     "app": "tsc && node dist/app.js",
     "pretty": "prettier --write \"src/**/*.ts\""
   },
