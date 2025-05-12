@@ -111,7 +111,8 @@ console.log(`Is ${testNumber} a prime number? ` + checkPrimeNumber(testNumber));
 console.log(`================`);
 
 // homework 2-4 (내가 작성한 코드)
-// 소수인지 체크하고 배열에 넣고 리턴을 배열의 갯수로 하면 될듯?
+// 소수인지 체크하고 배열에 넣고 배열의 원소 갯수 리턴하는 함수
+// 위에서 소수인지 체크하는 함수를 활용
 const countPrimeNumber: (n: number) => number = (n: number): number => {
   let i: number = 2;
   let primeNumberList: number[] = [];
@@ -161,8 +162,8 @@ console.log(countPrimeNumberPlus(8));
 console.log(`================`);
 
 // Practice 2
-// 자연수 N이 주어질 때,
-// 1부터 N까지의 수 중 3의 배수를 제외한 모든 수의 합을 반환하는 함수
+// 자연수 n이 주어질 때,
+// 1부터 n까지의 수 중 3의 배수를 제외한 모든 수의 합을 반환하는 함수
 // 이때 continue 를 사용해 3의 배수일 때 루프의 남은 부분을 건너뛰도록 구현
 // continue: 아래 코드를 무시하고, 즉시 조건 검사 -> 다음 반복
 const sumExcludingMultiplesOfThree = (n: number): number => {
@@ -198,4 +199,4 @@ const firstNegativeIndex = (n: number[]): number => {
   return foundIndex;
 };
 
-console.log(firstNegativeIndex([1,2,3,-2,4,5]));
+console.log(firstNegativeIndex([1, 2, 3, -2, 4, 5]));

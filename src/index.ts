@@ -107,6 +107,16 @@ const getUserProfile: (user: UserType) => string = (user: UserType): string => {
   }
 };
 
-for (let i = 0; i < 2; i = i + 1) {
+for (let i = 0; i < users.length; i = i + 1) {
   console.log(getUserProfile(users[i]));
 }
+
+const getUsersProfile: (user: UserType) => string = (
+  user: UserType,
+): string => {
+  if (users[0].isAdult === true) {
+    return "I am Adult. My age is ${users[0].age}";
+  } else {
+    return "I am not Adult. My age is ${users[0].age}";
+  }
+};

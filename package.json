@@ -5,6 +5,7 @@
     "index": "tsc && node dist/index.js",
     "homework": "tsc && node dist/homework.js",
     "app": "tsc && node dist/app.js",
+    "appGPT": "tsc && node dist/appGPT.js",
     "pretty": "prettier --write \"src/**/*.ts\""
   },
   "private": true,
