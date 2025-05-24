@@ -1,19 +1,19 @@
 import { input } from "./library/input";
-import { AuthUI } from "./ui/authUI";
+import { SignInUI } from "./ui/signInUI";
 import { UserService } from "./service/userService";
 import { SignUpUI } from "./ui/signUpUI";
 
 class App {
-  private authUI: AuthUI;
+  private signInUI: SignInUI;
   private userService: UserService;
   private signUpUI: SignUpUI;
 
   public constructor(
-    authUI: AuthUI,
+    signInUI: SignInUI,
     userService: UserService,
     signUpUI: SignUpUI,
   ) {
-    this.authUI = authUI;
+    this.signInUI = signInUI;
     this.userService = userService;
     this.signUpUI = signUpUI;
   }
@@ -26,19 +26,15 @@ class App {
 
       // 로그인
       if (answer === "1") {
-        const isInputValid = await this.authUI.validateSignInForm(); // boolean
+        const isInputValid = await this.signInUI.validateSignInForm(); // boolean
 
         if (!isInputValid) {
           continue;
         }
 
-        const inputEmail = this.authUI.getEmail();
-        const inputPassword = this.authUI.getPassword();
-        const isSignedIn = this.userService.signIn(inputEmail, inputPassword);
-
-        if (isSignedIn) {
-          process.exit(); // 프로그램 종료
-        }
+        const inputEmail = this.signInUI.getEmail();
+        const inputPassword = this.signInUI.getPassword();
+        this.userService.signIn(inputEmail, inputPassword);
 
         // 회원가입
       } else if (answer === "2") {
@@ -51,15 +47,11 @@ class App {
         const inputEmail = this.signUpUI.getEmail();
         const inputPassword = this.signUpUI.getPassword();
         const inputUserName = this.signUpUI.getUserName();
-        const isSignedUp = this.userService.signUp(
+        this.userService.signUp(
           inputEmail,
           inputPassword,
           inputUserName,
         );
-
-        if (isSignedUp) {
-          process.exit();
-        }
       } else {
         console.log("숫자 1과 2중에서 선택해주십시요.");
       }
@@ -67,7 +59,7 @@ class App {
   };
 }
 
-const authUI = new AuthUI();
+const authUI = new SignInUI();
 const userService = new UserService();
 const signUpUI = new SignUpUI();
 const app = new App(authUI, userService, signUpUI); // 생성자에서 명명한 파라미터 주입 -> DI가 자동으로 해줌

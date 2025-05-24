@@ -20,18 +20,6 @@ export class SignUpUI {
       return false;
     }
 
-    // 이메일 중복 검증
-    const usersText = fs.readFileSync("users.txt").toString();
-    const usersArray = usersText.split("\n");
-    // let isFoundEmail = false; -> 굳이 필요 없지 않나?
-    for (let i = 0; i < usersArray.length; i++) {
-      const userEmail = usersArray[i].split(", ")[0];
-      if (userEmail === this.email) {
-        console.log("중복되는 이메일이 있습니다.");
-        return false;
-      }
-    }
-
     // 비밀번호 입력 + 형식 검증
     this.password = await input(`비밀번호를 입력하세요: `);
     if (this.password.length < 4) {

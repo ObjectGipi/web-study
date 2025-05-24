@@ -1,6 +1,6 @@
 import { input } from "../library/input";
 
-export class AuthUI {
+export class SignInUI {
   private email: string;
   private password: string;
 
