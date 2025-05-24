@@ -34,8 +34,10 @@ class App {
 
         const inputEmail = this.signInUI.getEmail();
         const inputPassword = this.signInUI.getPassword();
-        this.userService.signIn(inputEmail, inputPassword);
-
+        const isSignInSuccess = await this.userService.signIn(inputEmail, inputPassword);
+        if (isSignInSuccess) {
+          process.exit();
+        }
         // 회원가입
       } else if (answer === "2") {
         const isSingUpValid = await this.signUpUI.ValidSignUpForm();
@@ -47,7 +49,7 @@ class App {
         const inputEmail = this.signUpUI.getEmail();
         const inputPassword = this.signUpUI.getPassword();
         const inputUserName = this.signUpUI.getUserName();
-        this.userService.signUp(
+        await this.userService.signUp(
           inputEmail,
           inputPassword,
           inputUserName,

@@ -1,9 +1,13 @@
 import fs from "node:fs";
+import * as util from "node:util";
+
+const appendFileAsync = util.promisify(fs.appendFile);
+const readFileAsync = util.promisify(fs.readFile);
 
 export class UserService {
-  public signIn = (email: string, password: string) => {
-    const usersText = fs.readFileSync("users.txt").toString();
-    const usersArray = usersText.split("\n");
+  public signIn = async (email: string, password: string) => {
+    const usersBuffer = await readFileAsync("users.txt");
+    const usersArray = usersBuffer.toString().split("\n");
     for (let i = 0; i < usersArray.length; i++) {
       const [userEmail, userPassword, userNickname] = usersArray[i].split(", ");
       if (userEmail === email && userPassword === password) {
@@ -15,8 +19,7 @@ export class UserService {
     return false;
   };
 
-  public signUp = (email: string, password: string, userName: string) => {
-    // 이메일 중복 검증
+  public signUp = async (email: string, password: string, userName: string) => {
     const usersText = fs.readFileSync("users.txt").toString();
     const usersArray = usersText.split("\n");
     for (let i = 0; i < usersArray.length; i++) {
@@ -26,7 +29,8 @@ export class UserService {
         return false;
       }
     }
-    fs.appendFile("users.txt", `${email}, ${password}, ${userName}\n`, () => {});
+
+    await appendFileAsync("users.txt", `${email}, ${password}, ${userName}\n`);
     console.log(
       `회원가입에 성공했어요! email: ${email}, password: ${password}, 닉네임: ${userName}`,
     );
