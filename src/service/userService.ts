@@ -1,39 +1,36 @@
-import fs from "node:fs";
-import * as util from "node:util";
-
-const appendFileAsync = util.promisify(fs.appendFile);
-const readFileAsync = util.promisify(fs.readFile);
+import { UserRepository } from "../repository/userRepository";
+import { UserDTO } from "../dto/userDTO";
 
 export class UserService {
+  private userRepository: UserRepository;
+
+  constructor(userRepository: UserRepository) {
+    this.userRepository = userRepository;
+  }
+
   public signIn = async (email: string, password: string) => {
-    const usersBuffer = await readFileAsync("users.txt");
-    const usersArray = usersBuffer.toString().split("\n");
-    for (let i = 0; i < usersArray.length; i++) {
-      const [userEmail, userPassword, userNickname] = usersArray[i].split(", ");
-      if (userEmail === email && userPassword === password) {
-        console.log(`로그인에 성공했어요! 닉네임: ${userNickname}`);
-        return true;
+    const users = await this.userRepository.getUsers();
+    for (let i = 0; i < users.length; i++) {
+      if (users[i].email === email && users[i].password === password) {
+        return new UserDTO(users[i]);
       }
     }
-    console.log(`이메일이 존재하지 않거나, 잘못된 비밀번호 입니다.`);
-    return false;
+    return null;
   };
 
   public signUp = async (email: string, password: string, userName: string) => {
-    const usersText = fs.readFileSync("users.txt").toString();
-    const usersArray = usersText.split("\n");
-    for (let i = 0; i < usersArray.length; i++) {
-      const userEmail = usersArray[i].split(", ")[0];
-      if (userEmail === email) {
-        console.log("중복되는 이메일이 있습니다.");
-        return false;
-      }
+
+    // 중복 검사
+    const existEmail = await this.userRepository.existEmail(email)
+    if (!existEmail) {
+      return null;
     }
 
-    await appendFileAsync("users.txt", `${email}, ${password}, ${userName}\n`);
-    console.log(
-      `회원가입에 성공했어요! email: ${email}, password: ${password}, 닉네임: ${userName}`,
-    );
-    return true;
+    // DB 저장
+    const saveUsers = await this.userRepository.saveUsers(email, password, userName)
+    return new UserDTO(saveUsers);
+    // 여기서도 return을 userDTO말고 email, password를 변수에 담아서 준 뒤에,
+    // app.ts에서 유저에게 콘솔에 출력해주면 되는 것 아닌가요?
+    // 혹시 입력값에 변경이 생기면 야근 대파티가 되기때문에 형식을 딱 DTO로 정해놓는건가요?
   };
 }
