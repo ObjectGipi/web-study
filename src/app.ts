@@ -57,8 +57,6 @@ class App {
         const saveUser = await this.userService.signUp(inputEmail, inputPassword, inputUserName)
         if (saveUser) {
           console.log(`회원가입을 성공했어요!\n이메일: ${saveUser.email}\n닉네임: ${saveUser.userName}`)
-          // saveUser를 사용하지 않고 아래처럼 써도 되나요? 어차피 input 받은 email과 저장되는 DTO가 같으니까
-          // console.log(`회원가입을 성공했어요!\n이메일: ${inputEmail}\n닉네임: ${inputUserName}`)
         }
       } else {
         console.log("숫자 1과 2중에서 선택해주십시요.");

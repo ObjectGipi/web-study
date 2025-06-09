@@ -18,13 +18,10 @@ export class UserRepository {
     return users;
   };
 
-  // 여기서 파라미터로 UserEntity를 받아서 email을 뽑아 쓰는게 낫나요?
-  // 아니면, email: string ~~~ 형식으로 받는게 낫나요?
-  public existEmail = async (email: string) => {
+  public findUserByEmail = async (email: string) => {
     const users = await this.getUsers()
     for (let i = 0; i < users.length; i++) {
       if (users[i].email === email) {
-        console.log("중복되는 이메일이 있습니다.");
         return false;
       }
     } return true;
