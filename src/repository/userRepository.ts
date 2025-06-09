@@ -1,14 +1,15 @@
-import util from "node:util";
-import fs from "node:fs";
 import { UserEntity } from "../entity/userEntity";
-
-const appendFileAsync = util.promisify(fs.appendFile);
-const readFileAsync = util.promisify(fs.readFile);
+import {IDatabase} from "./IDatabase";
 
 export class UserRepository {
+  private database: IDatabase
+
+  constructor(database: IDatabase) {
+    this.database = database;
+  }
+
   public getUsers = async () => {
-    const usersBuffer = await readFileAsync("users.txt");
-    const usersArray = usersBuffer.toString().split("\n");
+    const usersArray = await this.database.read("users.txt");
     const users = [];
     for (let i = 0; i < usersArray.length; i++) {
       const [userEmail, userPassword, userNickname] = usersArray[i].split(", ");
@@ -27,8 +28,8 @@ export class UserRepository {
     } return true;
   }
 
-  public saveUsers = async (email: string, password: string, userName: string) => {
-    await appendFileAsync("users.txt", `${email}, ${password}, ${userName}\n`);
+  public createUser = async (email: string, password: string, userName: string) => {
+    await this.database.write("users.txt", `${email}, ${password}, ${userName}\n`)
     return new UserEntity(email, password, userName);
   };
 }

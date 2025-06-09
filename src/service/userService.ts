@@ -1,5 +1,5 @@
-import { UserRepository } from "../repository/userRepository";
 import { UserDTO } from "../dto/userDTO";
+import {UserRepository} from "../repository/userRepository";
 
 export class UserService {
   private userRepository: UserRepository;
@@ -28,7 +28,7 @@ export class UserService {
     }
 
     // DB 저장
-    const saveUsers = await this.userRepository.saveUsers(email, password, userName)
+    const saveUsers = await this.userRepository.createUser(email, password, userName)
     return new UserDTO(saveUsers);
   };
 }
