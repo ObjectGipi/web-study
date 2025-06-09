@@ -54,9 +54,15 @@ class App {
         const inputEmail = this.signUpUI.getEmail();
         const inputPassword = this.signUpUI.getPassword();
         const inputUserName = this.signUpUI.getUserName();
-        const saveUser = await this.userService.signUp(inputEmail, inputPassword, inputUserName)
+        const saveUser = await this.userService.signUp(
+          inputEmail,
+          inputPassword,
+          inputUserName,
+        );
         if (saveUser) {
-          console.log(`회원가입을 성공했어요!\n이메일: ${saveUser.email}\n닉네임: ${saveUser.userName}`)
+          console.log(
+            `회원가입을 성공했어요!\n이메일: ${saveUser.email}\n닉네임: ${saveUser.userName}`,
+          );
         }
       } else {
         console.log("숫자 1과 2중에서 선택해주십시요.");
@@ -73,10 +79,10 @@ const app = new App(signInUI, userService, signUpUI);
 app.run();
 
 // 선생님께 설명할때를 대비한 흐름 메모
-  // 회원가입시 유저에게 입력값 받음(이메일, 비밀번호, 유저네임)
-  // 형식 검사
-  // 통과시, userService.signUp 메서드 사용
-  // signUp 메서드 내에서 userRepository.existEmail & userRepository.saveUsers 메서드 사용해서 중복검사 및 저장
-  // 이후, 저장한 값을 담은 Entity 반환
-  // 반환받은 Entity 값을 사용해서 userService.signU은 DTO를 반환
-  // app.ts -> 컨트롤러의 역할로서 받은 DTO에서 값을 뽑아내 유저에게 출력
+// 회원가입시 유저에게 입력값 받음(이메일, 비밀번호, 유저네임)
+// 형식 검사
+// 통과시, userService.signUp 메서드 사용
+// signUp 메서드 내에서 userRepository.existEmail & userRepository.saveUsers 메서드 사용해서 중복검사 및 저장
+// 이후, 저장한 값을 담은 Entity 반환
+// 반환받은 Entity 값을 사용해서 userService.signU은 DTO를 반환
+// app.ts -> 컨트롤러의 역할로서 받은 DTO에서 값을 뽑아내 유저에게 출력

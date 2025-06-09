@@ -19,15 +19,20 @@ export class UserRepository {
   };
 
   public findUserByEmail = async (email: string) => {
-    const users = await this.getUsers()
+    const users = await this.getUsers();
     for (let i = 0; i < users.length; i++) {
       if (users[i].email === email) {
         return false;
       }
-    } return true;
-  }
+    }
+    return true;
+  };
 
-  public saveUsers = async (email: string, password: string, userName: string) => {
+  public saveUsers = async (
+    email: string,
+    password: string,
+    userName: string,
+  ) => {
     await appendFileAsync("users.txt", `${email}, ${password}, ${userName}\n`);
     return new UserEntity(email, password, userName);
   };
