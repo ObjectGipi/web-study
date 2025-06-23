@@ -2,10 +2,7 @@
   "name": "web-study",
   "version": "1.0.0",
   "scripts": {
-    "index": "tsc && node dist/index.js",
-    "homework": "tsc && node dist/homework.js",
-    "app": "tsc && node dist/app.js",
-    "practice": "tsc && node dist/practice.js",
+    "app": "tsc && node dist/app/index.js",
     "pretty": "prettier --write \"src/**/*.ts\""
   },
   "private": true,
