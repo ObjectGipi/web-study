@@ -1,4 +1,4 @@
-import { input } from "../library/input";
+import { input } from "../utils/input";
 
 export class SignInUI {
   private email: string;

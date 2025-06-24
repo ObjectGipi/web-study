@@ -1,4 +1,4 @@
-import { input } from "../library/input";
+import { input } from "../utils/input";
 import fs from "node:fs";
 
 export class SignUpUI {
