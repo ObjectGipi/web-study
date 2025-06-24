@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "app": "tsc && node dist/app/index.js",
+    "test": "tsc && node dist/basic/fp/test.js",
+    "index": "tsc && node dist/basic/fp/index.js",
     "hw": "tsc && node dist/homework/homework.js",
     "pretty": "prettier --write \"src/**/*.ts\""
   },
