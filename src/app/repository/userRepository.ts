@@ -1,15 +1,16 @@
 import { UserEntity } from "../entity/userEntity";
-import { IDatabase } from "./IDatabase";
+import {INewDatabase, IOldDatabase} from "./IOldDatabase";
 
 export class UserRepository {
-  private database: IDatabase;
+  private database: IOldDatabase & INewDatabase;
 
-  constructor(database: IDatabase) {
+  constructor(database: IOldDatabase & INewDatabase) {
     this.database = database;
   }
 
   public getUsers = async () => {
-    const usersArray = await this.database.read("users.txt");
+    this.database.convertToCSV("users.txt");
+    const usersArray = await this.database.read("users.csv");
     const users = [];
     for (let i = 0; i < usersArray.length; i++) {
       const [userEmail, userPassword, userNickname] = usersArray[i].split(", ");
