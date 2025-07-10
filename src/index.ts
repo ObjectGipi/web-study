@@ -1,11 +1,11 @@
-import {UserRepository, UserRepositoryv2} from "./repository/userRepository";
+import {UserRepository} from "./repository/userRepository";
 import {SignInUI} from "./view/components/signInUI";
 import {UserService} from "./service/userService";
 import {SignUpUI} from "./view/components/signUpUI";
 import {App} from "./app";
 import {AuthScreen} from "./view/screens/authScreen";
 import {TxtDatabase} from "./database/txtDatabase";
-import {CSVDatabase} from "./database/csvDatabase";
+import {CSVDatabase} from "./database/csvDatabase"
 
 // const csvDatabase = new CSVDatabase();
 const txtDatabase = new TxtDatabase();
