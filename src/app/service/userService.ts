@@ -1,5 +1,5 @@
 import { UserDTO } from "../dto/userDTO";
-import {UserRepository} from "../repository/userRepository";
+import { UserRepository } from "../repository/userRepository";
 
 export class UserService {
   private userRepository: UserRepository;
@@ -19,16 +19,19 @@ export class UserService {
   };
 
   public signUp = async (email: string, password: string, userName: string) => {
-
     // 중복 검사
-    const existEmail = await this.userRepository.findUserByEmail(email)
+    const existEmail = await this.userRepository.findUserByEmail(email);
     if (!existEmail) {
       console.log("중복되는 이메일이 있습니다.");
       return null;
     }
 
     // DB 저장
-    const saveUsers = await this.userRepository.createUser(email, password, userName)
+    const saveUsers = await this.userRepository.createUser(
+      email,
+      password,
+      userName,
+    );
     return new UserDTO(saveUsers);
   };
 }

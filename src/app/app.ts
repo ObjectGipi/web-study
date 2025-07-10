@@ -1,11 +1,9 @@
-import {AuthScreen} from "./view/screens/authScreen";
+import { AuthScreen } from "./view/screens/authScreen";
 
 export class App {
   private authScreen: AuthScreen;
 
-  public constructor(
-    authScreen: AuthScreen
-  ) {
+  public constructor(authScreen: AuthScreen) {
     this.authScreen = authScreen;
   }
 
