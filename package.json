@@ -2,7 +2,7 @@
   "name": "web-study",
   "version": "1.0.0",
   "scripts": {
-    "app": "tsc && node dist/app/index.js",
+    "app": "tsc && node dist/app/app.js",
     "pretty": "prettier --write \"src/**/*.ts\""
   },
   "private": true,
