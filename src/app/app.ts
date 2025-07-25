@@ -1,14 +1,20 @@
 import { input } from "./utils/input";
-import * as fs from "node:fs";
-import { AuthUI } from "./ui/authUI";
+import { SignInUI } from "./ui/signInUI";
 import { UserService } from "./service/userService";
+import { SignUpUI } from "./ui/signUpUI";
 
 class App {
-  private authUI: AuthUI;
+  private signUpUI: SignUpUI;
+  private signInUI: SignInUI;
   private userService: UserService;
 
-  public constructor(authUI: AuthUI, userService: UserService) {
-    this.authUI = authUI;
+  public constructor(
+    signUpUI: SignUpUI,
+    signInUI: SignInUI,
+    userService: UserService,
+  ) {
+    this.signUpUI = signUpUI;
+    this.signInUI = signInUI;
     this.userService = userService;
   }
 
@@ -19,67 +25,51 @@ class App {
       );
 
       if (answer === `1`) {
-        const isSignUp = await this.authUI.validateSignUpForm();
+        const isSignValidate = await this.signUpUI.validateSignUpForm();
 
-        if (!isSignUp) {
+        if (!isSignValidate) {
           continue;
         }
 
-        const inputEmail = this.authUI.getEmail();
-        const inputPassword = this.authUI.getPassword();
-        const inputUserName = this.authUI.getUserName();
+        const inputEmail = this.signUpUI.getEmail();
+        const inputPassword = this.signUpUI.getPassword();
+        const inputUserName = this.signUpUI.getUserName();
+        const isSignedUp = await this.userService.signUp(
+          inputEmail,
+          inputPassword,
+          inputUserName,
+        );
 
-        const usersText: string = fs.readFileSync(`users.txt`).toString();
-        const usersArray: string[] = usersText.split(`\n`);
-        let isDuplicate: boolean = false;
-        for (let i: number = 0; i < usersArray.length; i = i + 1) {
-          const [existEmail]: string[] = usersArray[i].split(`, `);
-          if (inputEmail === existEmail) {
-            console.log(inputEmail);
-            isDuplicate = true;
-          }
-        }
-        if (isDuplicate) {
+        if (!isSignedUp) {
           console.log(`중복되는 email이 있습니다.`);
-          continue;
+        } else {
+          console.log(`회원가입이 완료되었습니다.\nemail: ${inputEmail}\nusername: ${inputUserName}`,);
         }
-
-        fs.appendFileSync(
-          `users.txt`,
-          `${inputEmail}, ${inputPassword}, ${inputUserName}\n`,
-        );
-        console.log(
-          `회원가입이 완료되었습니다.\nemail: ${inputEmail}\nusername: ${inputUserName}`,
-        );
-        break;
       }
 
       if (answer === `2`) {
-        const isInputValid = await this.authUI.validateSignInForm();
+        const isInputValid = await this.signInUI.validateSignInForm();
 
         if (!isInputValid) {
           continue;
         }
 
-        const inputEmail = this.authUI.getEmail();
-        const inputPassword = this.authUI.getPassword();
+        const inputEmail = this.signInUI.getEmail();
+        const inputPassword = this.signInUI.getPassword();
+        const isSignedIn = await this.userService.signIn(inputEmail, inputPassword);
 
-        const isCorrectUser = this.userService.signIn(
-          inputEmail,
-          inputPassword,
-        );
-
-        if (isCorrectUser) {
-          console.log(`로그인 성공!! 환영합니다`);
-          process.exit();
-        } else {
+        if (!isSignedIn) {
           console.log(`로그인 실패.. email이나 password를 확인해주세요.`);
+        } else {
+          console.log(`로그인 성공!! 환영합니다`);
         }
       }
     }
   };
 }
-const authUI = new AuthUI();
+
+const signUpUI = new SignUpUI();
+const signInUI = new SignInUI();
 const userService = new UserService();
-const app = new App(authUI, userService);
+const app = new App(signUpUI, signInUI, userService);
 app.run();

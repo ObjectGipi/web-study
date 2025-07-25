@@ -1,16 +1,29 @@
 import fs from "node:fs";
+import * as util from "node:util";
+
+const appendFileAsync = util.promisify(fs.appendFile);
+const readFileAsync = util.promisify(fs.readFile);
 
 export class UserService {
-  public signUp = () => {
+  public signUp =  async (email: string, password: string, userName: string) => {
+    const usersText = await readFileAsync(`users.txt`);
+    const usersArray = usersText.toString().split(`\n`);
+    for (let i: number = 0; i < usersArray.length; i = i + 1) {
+      const [userEmail] = usersArray[i].split(`, `);
+      if (email === userEmail) {
+        return false;
+      }
+    }
+    await appendFileAsync(`users.txt`, `${email}, ${password}, ${userName}\n`);
+    return true;
+  };
 
-  }
-
-  public signIn = (email: string, password: string) => {
-    const fileData: string = fs.readFileSync(`users.txt`).toString();
-    const allUsers: string[] = fileData.split(`\n`);
-    for (let i: number = 0; i < allUsers.length; i = i + 1) {
-      const [existEmail, existPassword]: string[] = allUsers[i].split(`, `);
-      if (email === existEmail && password === existPassword) {
+  public signIn = async (email: string, password: string) => {
+    const usersText = await readFileAsync(`users.txt`);
+    const usersArray = usersText.toString().split(`\n`);
+    for (let i: number = 0; i < usersArray.length; i = i + 1) {
+      const [userEmail, existPassword]: string[] = usersArray[i].split(`, `);
+      if (email === userEmail && password === existPassword) {
         return true;
       }
     }
