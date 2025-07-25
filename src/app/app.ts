@@ -26,10 +26,10 @@ const app = async () => {
         continue;
       }
 
-      const userName: string = await input(`nickname: `);
+      const userName: string = await input(`userName: `);
       let isCorrectUserName: boolean = true;
       for (let i: number = 0; i < userName.length; i = i + 1) {
-        const char = userName[i].charCodeAt(0)
+        const char: number = userName[i].charCodeAt(0)
         if (char < `a`.charCodeAt(0) || char > 'z'.charCodeAt(0)) {
           isCorrectUserName = false;
           break;
@@ -42,21 +42,21 @@ const app = async () => {
 
       const fileData: string = fs.readFileSync(`users.txt`).toString();
       const allUsers: string[] = fileData.split(`\n`);
-      let isDuplicate: boolean = true;
+      let isDuplicate: boolean = false;
       for (let i: number = 0; i < allUsers.length; i = i + 1) {
-        const existUser: string[] = allUsers[i].split(`, `);
-        if (email === existUser[0]) {
-          isDuplicate = false;
+        const [existEmail]: string[] = allUsers[i].split(`, `);
+        if (email === existEmail) {
+          isDuplicate = true;
         }
       }
-      if (!isDuplicate) {
+      if (isDuplicate) {
         console.log(`중복되는 email이 있습니다.`)
         continue;
       }
 
       fs.appendFileSync(`users.txt`, `${email}, ${password}, ${userName}\n`);
       console.log(
-        `회원가입이 완료되었습니다.\nemail: ${email}\nnickname: ${userName}`,
+        `회원가입이 완료되었습니다.\nemail: ${email}\nusername: ${userName}`,
       );
       break;
     }
@@ -68,20 +68,36 @@ const app = async () => {
       let loginSuccess: boolean = false;
       const fileData: string = fs.readFileSync(`users.txt`).toString();
       const allUsers: string[] = fileData.split(`\n`);
-
       for (let i: number = 0; i < allUsers.length; i = i + 1) {
-        const user: string[] = allUsers[i].split(`, `);
-        if (email === user[0] && password === user[1]) {
+        const [existEmail, existPassword, existUserName]: string[] = allUsers[i].split(`, `);
+        if (email === existEmail && password === existPassword) {
           loginSuccess = true;
-          userName = user[2];
+          userName = existUserName;
           break;
         }
       }
 
+      let isCorrectEmail: boolean = false;
+      for (let i: number = 0; i < email.length; i = i + 1) {
+        if (email[i] === `@`) {
+          isCorrectEmail = true;
+        }
+      }
+      if (!isCorrectEmail) {
+        console.log(`email은 @를 포함해야 합니다.`)
+        continue;
+      }
+
+      if (password.length < 4) {
+        console.log(`password는 4자리 이상이어야 합니다.`);
+        continue;
+      }
+
       if(loginSuccess) {
         console.log(`로그인 성공!! 환영합니다 ${userName}님`)
+        process.exit(0);
       } else {
-        console.log(`로그인 실패.. 아이디나 비밀번호를 확인해주세요.`)
+        console.log(`로그인 실패.. email이나 password를 확인해주세요.`)
       }
     }
   }
