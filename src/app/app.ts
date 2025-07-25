@@ -1,106 +1,85 @@
 import { input } from "./utils/input";
 import * as fs from "node:fs";
+import { AuthUI } from "./ui/authUI";
+import { UserService } from "./service/userService";
 
-const app = async () => {
-  while (true) {
-    const answer: string = await input(
-      `서비스를 숫자로 선택해주세요.\n회원가입: 1\n로그인: 2\n`,
-    );
-    if (answer === `1`) {
-      const email: string = await input(`email: `);
-      let isCorrectEmail: boolean = false;
-      for (let i: number = 0; i < email.length; i = i + 1) {
-        if (email[i] === `@`) {
-          isCorrectEmail = true;
-          break;
-        }
-      }
-      if (!isCorrectEmail) {
-        console.log(`email은 @를 포함해야 합니다.`)
-        continue;
-      }
+class App {
+  private authUI: AuthUI;
+  private userService: UserService;
 
-      const password: string = await input(`password: `);
-      if (password.length < 4) {
-        console.log(`password는 4자리 이상이어야 합니다.`);
-        continue;
-      }
-
-      const userName: string = await input(`userName: `);
-      let isCorrectUserName: boolean = true;
-      for (let i: number = 0; i < userName.length; i = i + 1) {
-        const char: number = userName[i].charCodeAt(0)
-        if (char < `a`.charCodeAt(0) || char > 'z'.charCodeAt(0)) {
-          isCorrectUserName = false;
-          break;
-        }
-      }
-      if (!isCorrectUserName) {
-        console.log(`userName은 영어 소문자로만 작성해야합니다.`)
-        continue;
-      }
-
-      const fileData: string = fs.readFileSync(`users.txt`).toString();
-      const allUsers: string[] = fileData.split(`\n`);
-      let isDuplicate: boolean = false;
-      for (let i: number = 0; i < allUsers.length; i = i + 1) {
-        const [existEmail]: string[] = allUsers[i].split(`, `);
-        if (email === existEmail) {
-          isDuplicate = true;
-        }
-      }
-      if (isDuplicate) {
-        console.log(`중복되는 email이 있습니다.`)
-        continue;
-      }
-
-      fs.appendFileSync(`users.txt`, `${email}, ${password}, ${userName}\n`);
-      console.log(
-        `회원가입이 완료되었습니다.\nemail: ${email}\nusername: ${userName}`,
-      );
-      break;
-    }
-
-    if (answer === `2`) {
-      const email: string = await input(`email: `);
-      const password: string = await input(`password: `);
-      let userName: string = ``;
-      let loginSuccess: boolean = false;
-      const fileData: string = fs.readFileSync(`users.txt`).toString();
-      const allUsers: string[] = fileData.split(`\n`);
-      for (let i: number = 0; i < allUsers.length; i = i + 1) {
-        const [existEmail, existPassword, existUserName]: string[] = allUsers[i].split(`, `);
-        if (email === existEmail && password === existPassword) {
-          loginSuccess = true;
-          userName = existUserName;
-          break;
-        }
-      }
-
-      let isCorrectEmail: boolean = false;
-      for (let i: number = 0; i < email.length; i = i + 1) {
-        if (email[i] === `@`) {
-          isCorrectEmail = true;
-        }
-      }
-      if (!isCorrectEmail) {
-        console.log(`email은 @를 포함해야 합니다.`)
-        continue;
-      }
-
-      if (password.length < 4) {
-        console.log(`password는 4자리 이상이어야 합니다.`);
-        continue;
-      }
-
-      if(loginSuccess) {
-        console.log(`로그인 성공!! 환영합니다 ${userName}님`)
-        process.exit(0);
-      } else {
-        console.log(`로그인 실패.. email이나 password를 확인해주세요.`)
-      }
-    }
+  public constructor(authUI: AuthUI, userService: UserService) {
+    this.authUI = authUI;
+    this.userService = userService;
   }
-};
 
-app();
+  run = async () => {
+    while (true) {
+      const answer: string = await input(
+        `서비스를 숫자로 선택해주세요.\n회원가입: 1\n로그인: 2\n`,
+      );
+
+      if (answer === `1`) {
+        const isSignUp = await this.authUI.validateSignUpForm();
+
+        if (!isSignUp) {
+          continue;
+        }
+
+        const inputEmail = this.authUI.getEmail();
+        const inputPassword = this.authUI.getPassword();
+        const inputUserName = this.authUI.getUserName();
+
+        const usersText: string = fs.readFileSync(`users.txt`).toString();
+        const usersArray: string[] = usersText.split(`\n`);
+        let isDuplicate: boolean = false;
+        for (let i: number = 0; i < usersArray.length; i = i + 1) {
+          const [existEmail]: string[] = usersArray[i].split(`, `);
+          if (inputEmail === existEmail) {
+            console.log(inputEmail);
+            isDuplicate = true;
+          }
+        }
+        if (isDuplicate) {
+          console.log(`중복되는 email이 있습니다.`);
+          continue;
+        }
+
+        fs.appendFileSync(
+          `users.txt`,
+          `${inputEmail}, ${inputPassword}, ${inputUserName}\n`,
+        );
+        console.log(
+          `회원가입이 완료되었습니다.\nemail: ${inputEmail}\nusername: ${inputUserName}`,
+        );
+        break;
+      }
+
+      if (answer === `2`) {
+        const isInputValid = await this.authUI.validateSignInForm();
+
+        if (!isInputValid) {
+          continue;
+        }
+
+        const inputEmail = this.authUI.getEmail();
+        const inputPassword = this.authUI.getPassword();
+
+        const isCorrectUser = this.userService.signIn(
+          inputEmail,
+          inputPassword,
+        );
+
+        if (isCorrectUser) {
+          console.log(`로그인 성공!! 환영합니다`);
+          process.exit();
+        } else {
+          console.log(`로그인 실패.. email이나 password를 확인해주세요.`);
+        }
+      }
+    }
+  };
+}
+const authUI = new AuthUI();
+const userService = new UserService();
+const app = new App(authUI, userService);
+app.run();
