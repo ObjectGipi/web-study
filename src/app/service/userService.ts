@@ -1,32 +1,43 @@
 import fs from "node:fs";
 import * as util from "node:util";
+import { UserRepository } from "../repository/userRepository";
+import { UserDTO } from "../dto/userDTO";
 
 const appendFileAsync = util.promisify(fs.appendFile);
-const readFileAsync = util.promisify(fs.readFile);
 
 export class UserService {
-  public signUp =  async (email: string, password: string, userName: string) => {
-    const usersText = await readFileAsync(`users.txt`);
-    const usersArray = usersText.toString().split(`\n`);
-    for (let i: number = 0; i < usersArray.length; i = i + 1) {
-      const [userEmail] = usersArray[i].split(`, `);
-      if (email === userEmail) {
-        return false;
-      }
-    }
-    await appendFileAsync(`users.txt`, `${email}, ${password}, ${userName}\n`);
+  private userRepository: UserRepository;
+
+  public constructor(userRepository: UserRepository) {
+    this.userRepository = userRepository;
+  }
+
+  public signUp = async (
+    inputEmail: string,
+    inputPassword: string,
+    inputUserName: string,
+  ) => {
+    const findUserByEmail = await this.userRepository.findUserByEmail(inputEmail);
+    if (!findUserByEmail) {
+      console.log(`중복되는 email이 있습니다.`);
+      return false;
+    } else {
+    await appendFileAsync(
+      `users.txt`,
+      `${inputEmail}, ${inputPassword}, ${inputUserName}\n`,
+    );
+      console.log(`회원가입이 완료되었습니다.\nemail: ${inputEmail}\nusername: ${inputUserName}`,);
     return true;
+    }
   };
 
-  public signIn = async (email: string, password: string) => {
-    const usersText = await readFileAsync(`users.txt`);
-    const usersArray = usersText.toString().split(`\n`);
-    for (let i: number = 0; i < usersArray.length; i = i + 1) {
-      const [userEmail, existPassword]: string[] = usersArray[i].split(`, `);
-      if (email === userEmail && password === existPassword) {
-        return true;
+  public signIn = async (inputEmail: string, inputPassword: string) => {
+    const userEntity = await this.userRepository.getUsers();
+    for (let i: number = 0; i < userEntity.length; i = i + 1) {
+      if (userEntity[i].email === inputEmail && userEntity[i].password === inputPassword) {
+        return new UserDTO(userEntity[i]);
       }
     }
-    return false;
+    return null;
   };
 }

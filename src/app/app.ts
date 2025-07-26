@@ -2,6 +2,7 @@ import { input } from "./utils/input";
 import { SignInUI } from "./ui/signInUI";
 import { UserService } from "./service/userService";
 import { SignUpUI } from "./ui/signUpUI";
+import { UserRepository } from "./repository/userRepository";
 
 class App {
   private signUpUI: SignUpUI;
@@ -34,17 +35,11 @@ class App {
         const inputEmail = this.signUpUI.getEmail();
         const inputPassword = this.signUpUI.getPassword();
         const inputUserName = this.signUpUI.getUserName();
-        const isSignedUp = await this.userService.signUp(
+        await this.userService.signUp(
           inputEmail,
           inputPassword,
           inputUserName,
         );
-
-        if (!isSignedUp) {
-          console.log(`중복되는 email이 있습니다.`);
-        } else {
-          console.log(`회원가입이 완료되었습니다.\nemail: ${inputEmail}\nusername: ${inputUserName}`,);
-        }
       }
 
       if (answer === `2`) {
@@ -56,12 +51,12 @@ class App {
 
         const inputEmail = this.signInUI.getEmail();
         const inputPassword = this.signInUI.getPassword();
-        const isSignedIn = await this.userService.signIn(inputEmail, inputPassword);
+        const userDTO = await this.userService.signIn(inputEmail, inputPassword);
 
-        if (!isSignedIn) {
-          console.log(`로그인 실패.. email이나 password를 확인해주세요.`);
+        if (userDTO) {
+          console.log(`로그인 성공! 환영합니다. ${userDTO.userName}님`);
         } else {
-          console.log(`로그인 성공!! 환영합니다`);
+          console.log(`로그인 실패. email & password를 확인해주세요.`);
         }
       }
     }
@@ -70,6 +65,7 @@ class App {
 
 const signUpUI = new SignUpUI();
 const signInUI = new SignInUI();
-const userService = new UserService();
+const userRepository = new UserRepository();
+const userService = new UserService(userRepository);
 const app = new App(signUpUI, signInUI, userService);
 app.run();
